@@ -3,7 +3,7 @@ import HabitPresenter from "../habit_presenter";
 describe("HabitPresenter", () => {
   const habits = [
     { id: 1, name: "Reading", count: 1 },
-    { id: 2, name: "Running", count: 3 },
+    { id: 2, name: "Running", count: 0 },
   ];
   let presenter;
   let update;
@@ -24,8 +24,8 @@ describe("HabitPresenter", () => {
   });
 
   it("decrements habit count", () => {
-    presenter.decrement(habits[1], update);
-    expect(presenter.getHabits()[1].count).toBe(2);
+    presenter.decrement(habits[0], update);
+    expect(presenter.getHabits()[0].count).toBe(0);
     checkUpdateIsCalled();
   });
 
@@ -56,11 +56,20 @@ describe("HabitPresenter", () => {
     }).toThrow("습관의 갯수는 3 이상이 될 수 없습니다.");
   });
 
-  it("resets all habit count to 0", () => {
-    presenter.reset(update);
-    expect(presenter.getHabits()[0].count).toBe(0);
-    expect(presenter.getHabits()[1].count).toBe(0);
-    checkUpdateIsCalled();
+  describe("reset", () => {
+    it("resets all habit count to 0", () => {
+      presenter.reset(update);
+      expect(presenter.getHabits()[0].count).toBe(0);
+      expect(presenter.getHabits()[1].count).toBe(0);
+      checkUpdateIsCalled();
+    });
+
+    it("does not create new object when count is 0", () => {
+      const habits = presenter.getHabits();
+      presenter.reset(update);
+      const updatedHabits = presenter.getHabits();
+      expect(updatedHabits[1]).toBe(habits[1]);
+    });
   });
 
   function checkUpdateIsCalled() {

@@ -48,6 +48,9 @@ export default class HabitPresenter {
         return { ...habit, count: 0 };
       }
       return habit;
+
+      // 아래의 경우 오브젝트 불변성을 지키지 못해 테스트 실패
+      // return { ...habit, count: 0 };
     });
     update(this.habits);
   }
